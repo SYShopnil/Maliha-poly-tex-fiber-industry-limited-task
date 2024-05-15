@@ -1,0 +1,132 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User Module API",
+    "version": "1.0.1",
+    "description": "These API's will control all user based activities"
+  },
+  "paths": {
+    "/user/get/all": {
+      "get": {
+        "tags": ["Get ALl Users"],
+        "summary": "Fetcher can get all user",
+        "description": "This API will give all user info",
+        "isAuth": false,
+        "responses": {
+          "200": {
+            "description": "App is up and"
+          }
+        }
+      }
+    },
+    "/user/create": {
+      "post": {
+        "tags": ["User Registration"],
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DCreateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "$ref": "#/components/schemas/User" },
+                    "status": { "type": "integer", "example": 201 }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "status": { "type": "integer", "example": 422 }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "status": { "type": "integer", "example": 500 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DCreateUser": {
+        "type": "object",
+        "properties": {
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "role": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" },
+          "confirm_password": { "type": "string" },
+          "profile_pic": { "type": "string" }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "role",
+          "email",
+          "password",
+          "confirm_password"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "user_id": { "type": "string" },
+          "first_name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "role": { "type": "string" },
+          "profile_pic": { "type": "string" },
+          "last_name": { "type": "string" },
+          "create_at": { "type": "string" },
+          "update_at": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "auth"
+      }
+    }
+  }
+}
