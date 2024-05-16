@@ -10,13 +10,15 @@ export class AuthMiddleWare {
       const { auth: cookieToken } = req.cookies; //get the authToken from cookie name "auth"
       const headToken = req.headers.authorization; //get the authToken from headers
       const authToken = headToken || cookieToken;
-      if (!authToken) {
+
+      if (!authToken || authToken == "undefined") {
         res.json({
           message: "Unauthorized user please login!!",
           status: 401,
         });
       } else {
         const isValidToken = await this.authService.verifyJWT(authToken);
+
         if (isValidToken) {
           const getTokenData: any = isValidToken; //store the token data as a verified userType
           const getLoggedInUser = await this.userService.getUserById(
