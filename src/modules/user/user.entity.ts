@@ -13,7 +13,9 @@ import {
   PrimaryColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from "typeorm";
+import { Text } from "../text/text.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -131,4 +133,7 @@ export class User extends BaseEntity {
   })
   @IsAlpha()
   public profile_pic!: string; //col - 10
+
+  @OneToMany(() => Text, (text) => text.owner)
+  public texts: Text[];
 }

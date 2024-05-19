@@ -248,6 +248,135 @@
           }
         }
       }
+    },
+    "/text/add": {
+      "post": {
+        "tags": ["Add new text list"],
+        "summary": "This api will add new text with element",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DCreateTextList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "payload": {
+                      "$ref": "#/components/schemas/DCreateTextList"
+                    },
+                    "status": { "type": "integer", "example": 201 }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Text successfully but element failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "payload": { "type": "object", "example": null },
+                    "status": { "type": "integer", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "status": { "type": "integer", "example": 501 },
+                    "payload": { "type": "object", "example": null }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/text/get/all": {
+      "get": {
+        "tags": ["Get All Text"],
+        "isAuth": true,
+        "summary": "This api will return all text of logged in user",
+        "responses": {
+          "200": {
+            "description": "Successfully Get",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "status": { "type": "integer", "example": 200 },
+                    "payload": { "$ref": "#/components/schemas/User" },
+                    "isAuth": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or not logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "status": { "type": "integer", "example": 404 },
+                    "user": { "type": "null" },
+                    "isAuth": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "status": { "type": "integer", "example": 500 },
+                    "user": { "type": "object", "example": null },
+                    "isAuth": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -279,6 +408,7 @@
         },
         "required": ["email", "password"]
       },
+
       "DCreateUser": {
         "type": "object",
         "properties": {
@@ -298,6 +428,39 @@
           "password",
           "confirm_password"
         ]
+      },
+      "DTextDataElements": {
+        "type": "object",
+        "properties": {
+          "isChecked": {
+            "type": "boolean",
+            "description": "Is Checked should be boolean"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Element Value should be integer"
+          },
+          "elementId": {
+            "type": "string",
+            "description": "element Id should be string"
+          }
+        },
+        "required": ["isChecked", "value", "elementId"]
+      },
+      "DCreateTextList": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTextDataElements"
+            }
+          }
+        }
+      },
+      "GetAllTextResponse": {
+        "type": "object",
+        "properties": {}
       }
     },
     "securitySchemes": {
