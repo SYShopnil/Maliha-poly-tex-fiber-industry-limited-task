@@ -318,64 +318,20 @@
     },
     "/text/get/all": {
       "get": {
-        "tags": ["Get All Text"],
-        "isAuth": true,
-        "summary": "This api will return all text of logged in user",
+        "summary": "Get Payload",
+        "description": "Get the payload data",
         "responses": {
           "200": {
             "description": "Successfully Get",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": { "type": "string" },
-                    "status": { "type": "integer", "example": 200 },
-                    "payload": { "$ref": "#/components/schemas/User" },
-                    "isAuth": { "type": "boolean" }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User not found or not logged in",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": { "type": "string" },
-                    "status": { "type": "integer", "example": 404 },
-                    "user": { "type": "null" },
-                    "isAuth": { "type": "boolean" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": { "type": "string" },
-                    "status": { "type": "integer", "example": 500 },
-                    "user": { "type": "object", "example": null },
-                    "isAuth": { "type": "boolean" }
-                  }
+                  "$ref": "#/components/schemas/Payload"
                 }
               }
             }
           }
-        },
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ]
+        }
       }
     }
   },
@@ -458,9 +414,61 @@
           }
         }
       },
-      "GetAllTextResponse": {
+
+      "Payload": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TextPayload"
+            }
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code"
+          }
+        }
+      },
+      "TextPayload": {
+        "type": "object",
+        "properties": {
+          "textId": {
+            "type": "string",
+            "description": "ID of the text"
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total value"
+          },
+          "elements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Element"
+            }
+          }
+        }
+      },
+      "Element": {
+        "type": "object",
+        "properties": {
+          "elementId": {
+            "type": "string",
+            "description": "ID of the element"
+          },
+          "isChecked": {
+            "type": "boolean",
+            "description": "Whether the element is checked"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Value of the element"
+          }
+        }
       }
     },
     "securitySchemes": {
