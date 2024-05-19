@@ -263,6 +263,11 @@
             }
           }
         },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "201": {
             "description": "User successfully created",
@@ -318,8 +323,14 @@
     },
     "/text/get/all": {
       "get": {
-        "summary": "Get Texts Payload",
-        "description": "Get the payload data of Text",
+        "tags": ["Get All Text Element"],
+        "summary": "Get Auth User Text Element",
+        "description": "This API will give all text element of logged in user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successfully Get",
@@ -378,7 +389,11 @@
             }
           }
         },
-
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Text element update successfully",
