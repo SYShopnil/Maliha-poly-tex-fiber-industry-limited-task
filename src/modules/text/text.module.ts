@@ -13,6 +13,12 @@ router.post(
   textController.addNewTextList.bind(textController)
 );
 
+router.post(
+  "/element/update",
+  authMiddleware.auth.bind(authMiddleware),
+  textController.updateTextElementById.bind(textController)
+);
+
 router.get(
   "/get/all",
   authMiddleware.auth.bind(authMiddleware),

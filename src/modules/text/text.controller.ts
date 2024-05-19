@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { TextService } from "./text.service";
-import { DCreateTextList } from "./dto/create-text-list";
+import {
+  DCreateTextList,
+  DMultipleUpdateTextListById,
+} from "./dto/create-text-list";
 
 export class TextController {
   private textService = new TextService();
@@ -52,6 +55,32 @@ export class TextController {
       res.json({
         message: err.message,
         payload: null,
+        status: 501,
+      });
+    }
+  }
+
+  async updateTextElementById(req: Request, res: Response) {
+    try {
+      const bodyData: DMultipleUpdateTextListById = req.body;
+      const { message, status } = await this.textService.updateMultipleTextById(
+        bodyData
+      );
+      if (status) {
+        res.status(200).json({
+          message,
+          status: 200,
+        });
+      } else {
+        res.status(401).json({
+          message,
+          status: 401,
+        });
+      }
+    } catch (err) {
+      console.log(err.message);
+      res.status(501).json({
+        message: err.message,
         status: 501,
       });
     }

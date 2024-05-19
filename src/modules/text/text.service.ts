@@ -1,6 +1,11 @@
+import { Element } from "../elements/element.entity";
 import { ElementService } from "../elements/element.service";
 import { User } from "../user/user.entity";
-import { DCreateTextList } from "./dto/create-text-list";
+import {
+  DCreateTextList,
+  DMultipleUpdateTextListById,
+  DTextListUpdateByElementId,
+} from "./dto/create-text-list";
 import { Text } from "./text.entity";
 
 export class TextService {
@@ -63,11 +68,17 @@ export class TextService {
         .leftJoinAndSelect("user.texts", "text")
         .leftJoinAndSelect("text.elements", "element")
         .where("user.user_id = :id", { id: user_id })
+        .orderBy("text.create_at", "DESC")
         .getMany();
       const result = userTexts.map((user) => {
         return user.texts.map((text) => ({
           textId: text.textId,
-          total: text.elements.reduce((acc, curr) => acc + curr.value, 0),
+          total: text.elements.reduce((acc, curr) => {
+            if (curr.isChecked) {
+              return acc + curr.value;
+            }
+            return acc; // Return accumulator if isChecked is false
+          }, 0),
           elements: text.elements.map((element) => ({
             elementId: element.elementId,
             isChecked: element.isChecked,
@@ -77,7 +88,7 @@ export class TextService {
       });
       if (result.length) {
         return {
-          payload: result,
+          payload: result[0],
           status: true,
           message: "Successfully Get",
         };
@@ -85,13 +96,74 @@ export class TextService {
         return {
           payload: null,
           status: true,
-          message: "UnSuccessfully Get",
+          message: "Text Not Found",
         };
       }
     } catch (err) {
       return {
         payload: null,
         status: true,
+        message: err.message,
+      };
+    }
+  }
+  async updateMultipleTextById(bodyData: DMultipleUpdateTextListById) {
+    const responseSuccessQueue: boolean[] = [];
+    const responseMessageQueue: string[] = [];
+    try {
+      for (const element of bodyData.payload) {
+        const { status, message } = await this.updateTextElementById(element);
+        responseSuccessQueue.push(status);
+        responseMessageQueue.push(message);
+      }
+      if (responseSuccessQueue.filter((a) => a == false).length) {
+        // all update is not complete
+        return {
+          status: false,
+          message: responseMessageQueue,
+        };
+      } else {
+        return {
+          status: true,
+          message: ["All Updated Successfully"],
+        };
+      }
+    } catch (err) {
+      console.log(err.message);
+      return {
+        message: [err.message],
+        status: false,
+      };
+    }
+  }
+  async updateTextElementById(
+    payload: DTextListUpdateByElementId
+  ): Promise<{ status: boolean; message: string }> {
+    try {
+      const updateData = await Element.createQueryBuilder("element")
+        .update()
+        .set({
+          isChecked: payload.isChecked,
+          value: payload.value,
+        })
+        .where("element.elementId = :elementId", {
+          elementId: payload.elementId,
+        })
+        .execute();
+      if (updateData.affected) {
+        return {
+          message: `${payload.elementId} has updated!!`,
+          status: true,
+        };
+      } else {
+        return {
+          message: "Update Failed",
+          status: false,
+        };
+      }
+    } catch (err) {
+      return {
+        status: false,
         message: err.message,
       };
     }

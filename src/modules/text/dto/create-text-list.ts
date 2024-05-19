@@ -29,3 +29,5 @@ export class DTextDataElements {
 export class DCreateTextList {
   payload: DTextDataElements[];
 }
+export class DMultipleUpdateTextListById extends DCreateTextList {}
+export class DTextListUpdateByElementId extends DTextDataElements {}
