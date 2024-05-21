@@ -26,8 +26,14 @@ export class DTextDataElements {
   elementId: string;
 }
 
+export class DTextDataElementsForUpdate extends DTextDataElements {
+  text: any;
+}
+
 export class DCreateTextList {
   payload: DTextDataElements[];
 }
-export class DMultipleUpdateTextListById extends DCreateTextList {}
+export class DMultipleUpdateTextListById extends DCreateTextList {
+  textId: string;
+}
 export class DTextListUpdateByElementId extends DTextDataElements {}

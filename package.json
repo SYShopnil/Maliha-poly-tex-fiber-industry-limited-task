@@ -17,7 +17,11 @@
     "dev:watch": "npm run build:dist && npm run swagger && npm run watch",
     "start": "node dist/index.js",
     "typeorm": "dotenv -e .env typeorm",
-    "swagger": "swagger-jsdoc -d src/swagger.json -o  dist/swagger.json src/swagger.ts"
+    "typeorm:generate": "npx typeorm migration:generate -n default",
+    "typeorm:run": "npx typeorm migration:run",
+    "typeorm:revert": "npx typeorm migration:revert",
+    "swagger": "swagger-jsdoc -d src/swagger.json -o  dist/swagger.json src/swagger.ts",
+    "migration:generate": "npx typeorm migration:generate -n MigrationName"
   },
   "keywords": [],
   "author": "chiragmehta900",

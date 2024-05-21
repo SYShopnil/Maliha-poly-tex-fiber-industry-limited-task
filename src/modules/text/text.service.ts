@@ -8,6 +8,11 @@ import {
 } from "./dto/create-text-list";
 import { Text } from "./text.entity";
 
+interface IReturnGetElementByTextId {
+  message: string;
+  status: boolean;
+  payload: Text | null;
+}
 export class TextService {
   private ElementService = new ElementService();
   async createTextList(payload: DCreateTextList, user: User) {
@@ -55,6 +60,35 @@ export class TextService {
       return {
         message: err.message,
         payload: null,
+        status: false,
+      };
+    }
+  }
+  async createMultipleTextById(bodyData: DMultipleUpdateTextListById) {
+    const responseSuccessQueue: boolean[] = [];
+    const responseMessageQueue: string[] = [];
+    try {
+      for (const element of bodyData.payload) {
+        const { status, message } = await this.updateTextElementById(element);
+        responseSuccessQueue.push(status);
+        responseMessageQueue.push(message);
+      }
+      if (responseSuccessQueue.filter((a) => a == false).length) {
+        // all update is not complete
+        return {
+          status: false,
+          message: responseMessageQueue,
+        };
+      } else {
+        return {
+          status: true,
+          message: ["All Updated Successfully"],
+        };
+      }
+    } catch (err) {
+      console.log(err.message);
+      return {
+        message: [err.message],
         status: false,
       };
     }
@@ -136,6 +170,76 @@ export class TextService {
       };
     }
   }
+
+  async deleteMultipleTextElementById(bodyData: DMultipleUpdateTextListById) {
+    const responseSuccessQueue: boolean[] = [];
+    const responseMessageQueue: string[] = [];
+    try {
+      for (const element of bodyData.payload) {
+        const { status, message } = await this.deleteTextElementById(element);
+        responseSuccessQueue.push(status);
+        responseMessageQueue.push(message);
+      }
+      if (responseSuccessQueue.filter((a) => a == false).length) {
+        // all update is not complete
+        return {
+          status: false,
+          message: responseMessageQueue,
+        };
+      } else {
+        return {
+          status: true,
+          message: ["All Deleted Successfully"],
+        };
+      }
+    } catch (err) {
+      console.log(err.message);
+      return {
+        message: [err.message],
+        status: false,
+      };
+    }
+  }
+  async getTextElementsByTextId(
+    textId: string
+  ): Promise<IReturnGetElementByTextId> {
+    try {
+      const getTextElements = await Text.createQueryBuilder("text")
+        .leftJoinAndSelect("text.elements", "elements")
+        .where("text.textId = :id", { id: textId })
+        // .select("text.elements.elementId")
+        .getOne();
+
+      if (getTextElements) {
+        return {
+          message: "Text Element Found!!!",
+          status: true,
+          payload: getTextElements,
+        };
+      } else {
+        return {
+          message: "Text Element Not Found!!!",
+          status: false,
+          payload: null,
+        };
+      }
+    } catch (err) {
+      return {
+        message: err.message,
+        status: false,
+        payload: null,
+      };
+    }
+  }
+  /**
+   *
+   * Use Cases
+   * 1. user can update exist element only of a text
+   * 2. user can update existing one and add more element also
+   * 3. user can deleted existing one and also can update remains element
+   *
+   */
+
   async updateTextElementById(
     payload: DTextListUpdateByElementId
   ): Promise<{ status: boolean; message: string }> {
@@ -153,6 +257,36 @@ export class TextService {
       if (updateData.affected) {
         return {
           message: `${payload.elementId} has updated!!`,
+          status: true,
+        };
+      } else {
+        return {
+          message: "Update Failed",
+          status: false,
+        };
+      }
+    } catch (err) {
+      return {
+        status: false,
+        message: err.message,
+      };
+    }
+  }
+
+  async deleteTextElementById(
+    payload: DTextListUpdateByElementId
+  ): Promise<{ status: boolean; message: string }> {
+    try {
+      const deleteData = await Element.createQueryBuilder("element")
+        .delete()
+        .where("element.elementId = :elementId", {
+          elementId: payload.elementId,
+        })
+        .execute();
+      // console.log({ affected: deleteData.affected });
+      if (deleteData.affected) {
+        return {
+          message: `${payload.elementId} has deleted!!`,
           status: true,
         };
       } else {

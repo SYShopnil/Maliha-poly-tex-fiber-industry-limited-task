@@ -63,5 +63,5 @@ export class Element extends BaseEntity {
 
   @JoinColumn({ name: "text" })
   @ManyToOne(() => Text, (text) => text.elements)
-  public text: Text;
+  public text: Text; //col 6
 }

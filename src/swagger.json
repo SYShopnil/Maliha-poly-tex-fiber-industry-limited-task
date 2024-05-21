@@ -384,7 +384,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DCreateTextList"
+                "$ref": "#/components/schemas/UpdateTextListElement"
               }
             }
           }
@@ -514,6 +514,20 @@
       "DCreateTextList": {
         "type": "object",
         "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTextDataElements"
+            }
+          }
+        }
+      },
+      "UpdateTextListElement": {
+        "type": "object",
+        "properties": {
+          "textId": {
+            "type": "string"
+          },
           "payload": {
             "type": "array",
             "items": {
