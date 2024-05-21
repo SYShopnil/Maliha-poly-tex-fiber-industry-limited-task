@@ -106,6 +106,14 @@ To run this project, you will need to add the following environment variables to
 
 **`CORS_ORIGIN`** `** //this will be the client's base url. Example: `"http://localhost:3000" For NextJS`
 
+## ERD Diagram
+
+<img src = "./documentaion/ERD.png" >
+
+## Use Case Diagram
+
+<img src = "./documentaion/Use_Case.png" >
+
 ## API Reference
 
 #### Create user
