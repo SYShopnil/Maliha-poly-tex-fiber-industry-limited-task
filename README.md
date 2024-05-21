@@ -29,19 +29,25 @@ Developer Ready: A Text List CRUD APP for Maliha-poly-tex-fiber-industry-limited
 Clone the project
 
 ```bash
-  git clone https://github.com/SYShopnil/express-typescript-typeORM-code-base.git
+  git clone https://github.com/SYShopnil/Maliha-poly-tex-fiber-industry-limited-task-server.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd express-typescript-typeORM-code-base
+  cd Maliha-poly-tex-fiber-industry-limited-task-server
 ```
 
 Install dependencies (Development)
 
 ```bash
   npm install
+```
+
+Get .ENV file
+
+```bash
+  cp .env.example .env
 ```
 
 Start the tsc
