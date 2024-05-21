@@ -1,7 +1,6 @@
-# Node TypeScript Boilerplate Express with MySQL(TypeORM)
+# Maliha-poly-tex-fiber-industry-limited Task with NodeJS TypeScript Express and MySQL(TypeORM)
 
-Developer Ready: A comprehensive template. Works out of the box for most Node.js projects.
-This project is intended to be used with the latest Active LTS release of Node.js.
+Developer Ready: A Text List CRUD APP for Maliha-poly-tex-fiber-industry-limited.
 
 ## Tech Stack
 
@@ -10,6 +9,20 @@ This project is intended to be used with the latest Active LTS release of Node.j
 **Server:** Node, Express
 
 **DataBase:** mySQL, typeorm
+
+## Key Feather
+
+**User will decide, how much textbox will need.**
+
+**When user will press Add Textbox button, you will take the input field number and then generate number of text boxes with checkboxes dynamically.**
+
+**After generate the text boxes, user will give the input number in those text boxes and then select the checkbox.**
+
+**Based on selected checkboxes, user will see the output that, number of positions they selected and what is the total number of that selected text boxes.**
+
+**This total number will save in the database**
+
+**For Update the Information, at first in UI all the information need to retrieve from the database. And then again same process as user did for save operation. User uncheck the textbox or increase/decrease the textbox field as well. Based on uncheck & textbox increase/decrease, the information saves in the database.**
 
 ## Run Locally
 
@@ -124,7 +137,7 @@ To run this project, you will need to add the following environment variables to
 
 ### Documentation
 
-[Swagger Link](https://express-typescript-typeorm-code-base-1.onrender.com/docs)
+[Swagger Link](https://maliha-poly-tex-fiber-industry-limited.onrender.com/docs/)
 
 ## Support
 
